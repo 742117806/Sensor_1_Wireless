@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stm32f0xx.h": "c",
+        "uart.h": "c",
+        "taskapp.h": "c",
+        "spi.h": "c"
+    }
+}

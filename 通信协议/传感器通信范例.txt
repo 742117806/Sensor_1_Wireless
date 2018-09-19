@@ -1,0 +1,15 @@
+传感器数据块帧范例：
+
+传感器上行
+
+AC DA GA GA GA FSQ C LEN 00 03 FF FF (03 03 01 04 XX XX XX 03 01 03 XX XX XX 03 01 02 XX XX XX) CRC16 53
+
+
+小i下行（读数据块）
+
+AC DA GA GA GA FSQ C LEN 80 03 FF FF CRC16 53
+
+
+    Total RO  Size (Code + RO Data)                13168 (  12.86kB)
+    Total RW  Size (RW Data + ZI Data)              2288 (   2.23kB)
+    Total ROM Size (Code + RO Data + RW Data)      13248 (  12.94kB)
