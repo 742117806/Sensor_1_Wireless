@@ -146,7 +146,24 @@
           <Name>-U56FF74066765505157391767 -O2254 -S3 -C0 -A0 -N00("ARM CoreSight SW-DP") -D00(0BB11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC800 -FN1 -FF0STM32F0xx_64.FLM -FS08000000 -FL010000 -FP0($$Device:STM32F030C8Tx$CMSIS\Flash\STM32F0xx_64.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>392</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218746</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\宸ヤ綔椤圭洰\鐜鐩戞祴浠?鐜鐩戞祴浠浆鎺ユ澘鍥轰欢绋嬪簭\STM32F030C8_RTX\Src\device.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\STM32F030C8_RTX\../Src/device.c\392</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -172,6 +189,11 @@
           <count>4</count>
           <WinNumber>1</WinNumber>
           <ItemText>uploadData</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>sensor_joinnet_repoint_content</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

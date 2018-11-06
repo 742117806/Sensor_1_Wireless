@@ -177,6 +177,9 @@ uint8_t  WirelessRxProcess(uint8_t *dat,uint8_t len)
 */ 
 void AppTaskWireless(void)
 {
+//	FRAME_CMD_t *p;
+//	uint8_t out_len;
+	
 	if (WIRELESS_STATUS == Wireless_RX_Finish)
 	{
 //			#if _74CODE_EN

@@ -330,6 +330,7 @@ void DeviceJoinNet(FRAME_CMD_t *frame_cmd)
 	uint8_t ret;
 	JOINE_NET_CMD_t *joine_net_cmd;
 	SENSOR_JOINNET_DATA_t sensor_joinnet_repoint_content;
+	memset(&sensor_joinnet_repoint_content,0x00,sizeof(SENSOR_JOINNET_DATA_t)) ;
 
 	joine_net_cmd = (JOINE_NET_CMD_t*)frame_cmd->userData.content;
 	ret = memcmp(joine_net_cmd->mac,deviceInfo.mac,8);			//比较自身MAC于接收到的MAC是否一样
