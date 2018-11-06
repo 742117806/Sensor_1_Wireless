@@ -213,7 +213,7 @@ void DeviceMAC_WriteProcess(uint8_t *recBuff,uint8_t len)
 					DeviceInfoInit();		//读取设备信息
 					if(memcmp(mac_cmd->mac,deviceInfo.mac,8)==0)
 					{
-						UartSendBytes(USART1,ack_temp,6);		//烧录成功应答
+						UartSendBytes(USART2,ack_temp,6);		//烧录成功应答
 					}
 					else
 					{
@@ -225,7 +225,7 @@ void DeviceMAC_WriteProcess(uint8_t *recBuff,uint8_t len)
 						deviceInfo.mac_exist = 0x00; 
 						STMFLASH_Write(DEVICE_INFO_FSADDR_START,(uint16_t*)&deviceInfo,(sizeof(deviceInfo)+1)/2);   //把标志位写到保存数据区
 						
-						UartSendBytes(USART1,ack_temp,6);		//烧录失败应答
+						UartSendBytes(USART2,ack_temp,6);		//烧录失败应答
 					}
 					
 				}

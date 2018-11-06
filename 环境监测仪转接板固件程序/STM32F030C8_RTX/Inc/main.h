@@ -53,13 +53,13 @@
 #define LEDG_GPIO_Port GPIOA
 #define LEDR_Pin GPIO_PIN_5
 #define LEDR_GPIO_Port GPIOA
-#define SI4438_SDN_Pin GPIO_PIN_6
-#define SI4438_SDN_GPIO_Port GPIOF
-#define SI4438_nIRQ_Pin GPIO_PIN_7
-#define SI4438_nIRQ_GPIO_Port GPIOF
-#define SI4438_nIRQ_EXTI_IRQn EXTI4_15_IRQn
 #define SI4438_NSS_Pin GPIO_PIN_15
 #define SI4438_NSS_GPIO_Port GPIOA
+#define SI4438_nIRQ_Pin GPIO_PIN_6
+#define SI4438_nIRQ_GPIO_Port GPIOB
+#define SI4438_nIRQ_EXTI_IRQn EXTI4_15_IRQn
+#define SI4438_SDN_Pin GPIO_PIN_7
+#define SI4438_SDN_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**

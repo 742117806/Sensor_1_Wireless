@@ -83,7 +83,6 @@ static void MX_TIM1_Init(void);
 
 /* USER CODE END PFP */
 
-
 /* USER CODE BEGIN 0 */
 /**
 ********************************************************************************************************* 
@@ -197,7 +196,7 @@ void AppTaskWireless(void)
 //			}
 //			#endif 			
 		//LEDG_TOGGLE();
-		//DEBUG_SendBytes(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
+		//UartSendBytes(USART2,Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
 		WirelessRxProcess(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
 		if(WIRELESS_STATUS == Wireless_RX_Finish)
         {
@@ -214,10 +213,10 @@ void AppTaskWireless(void)
 	else if (WIRELESS_STATUS == Wireless_RX_Failure)
 	{
 		WirelessRx_Timeout_Cnt = 0;
-		DEBUG_Printf("Wireless_RX_Failure\r\n");
-		delay_ms(30);
-		Set_Property(Interrupt_Close);
-		delay_ms(200);
+//		DEBUG_Printf("Wireless_RX_Failure\r\n");
+//		delay_ms(30);
+//		Set_Property(Interrupt_Close);
+//		delay_ms(200);
 		Si4438_Receive_Start(Wireless_Channel[0]); //开始接收无线数据
 	}
 //		else if ((WIRELESS_STATUS == Wireless_RX_Sync) && (WirelessRx_Timeout_Cnt > 500)) //500ms超时
@@ -276,8 +275,8 @@ void AppTaskUartRx(void)
 	if(uart1RecBuff.state == SENSOR_FRAME_FENISH)
 	{
 		DEBUG_SendBytes(uart1RecBuff.buff,uart1RecBuff.cnt);
-        SensorProcess(uart1RecBuff.buff);
-		 
+    SensorProcess(uart1RecBuff.buff);
+		//Si4438_Transmit_Start(&Wireless_Buf, Wireless_Channel[0],uart1RecBuff.buff, uart1RecBuff.cnt);		//加密 
 		uart1RecBuff.state = SENSOR_FRAME_HEAD;
 	}
 	
@@ -297,7 +296,7 @@ uint32_t SensorDataReadCnt = 0;
 void AppTaskUartTx(void)
 {
 
-	if(SensorDataReadCnt > 10000)		//10秒
+	if(SensorDataReadCnt > 5000)		//1秒
 	{
 		SensorDataReadCnt = 0;
 		SensorDataReadCmdSend();
@@ -345,7 +344,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim1);
 	HAL_UART_Receive_IT(&huart1, &uart1Rec, 1);
-	_74Code_Test();
+	HAL_UART_Receive_IT(&huart2, &uart2Rec, 1);
+//	_74Code_Test();
 	Device_MAC_Init();
 	
 	Get_WireLessChannel(Wireless_Channel);
@@ -522,7 +522,7 @@ static void MX_USART2_UART_Init(void)
 {
 
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 38400;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -551,7 +551,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -568,12 +567,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SI4438_SDN_Pin */
-  GPIO_InitStruct.Pin = SI4438_SDN_Pin;
+  /*Configure GPIO pin : SI4438_NSS_Pin */
+  GPIO_InitStruct.Pin = SI4438_NSS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(SI4438_SDN_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(SI4438_NSS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SI4438_nIRQ_Pin */
   GPIO_InitStruct.Pin = SI4438_nIRQ_Pin;
@@ -581,12 +580,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SI4438_nIRQ_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SI4438_NSS_Pin */
-  GPIO_InitStruct.Pin = SI4438_NSS_Pin;
+  /*Configure GPIO pin : SI4438_SDN_Pin */
+  GPIO_InitStruct.Pin = SI4438_SDN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(SI4438_NSS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(SI4438_SDN_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);

@@ -136,7 +136,7 @@ void EXTI4_15_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_15_IRQn 0 */
 
   /* USER CODE END EXTI4_15_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */
@@ -191,11 +191,26 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+   uint32_t timeout = 0;
+   extern uint8_t uart2Rec;
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
+  	timeout = 0;
+    while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY) //等待就绪
+    {
+        timeout++; ////超时处理
+        if (timeout > HAL_MAX_DELAY)
+            break;
+    }
 
+    timeout = 0;
+    while (HAL_UART_Receive_IT(&huart2, &uart2Rec, 1) != HAL_OK) //一次处理完成之后，重新开启中断并设置RxXferCount为1
+    {
+        timeout++; //超时处理
+        if (timeout > HAL_MAX_DELAY)
+            break;
+    }
   /* USER CODE END USART2_IRQn 1 */
 }
 

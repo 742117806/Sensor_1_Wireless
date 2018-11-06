@@ -60,7 +60,7 @@ void SI4438_ReadCmdBuff(uint8_t rw_mode)		//READ_CMD_BUFF 0:w 1:r
 			WIRELESS_NSEL_H();
 	}	
 }
-#pragma optimize = speed
+//#pragma optimize = speed
 
 
 void Get_INTState(uint8_t int_status[8], uint8_t ph_clr, uint8_t mod_clr, uint8_t chip_clr)

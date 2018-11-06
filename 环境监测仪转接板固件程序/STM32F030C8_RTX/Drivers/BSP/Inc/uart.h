@@ -5,12 +5,12 @@
 #include "stm32f0xx.h"
 
 
-#define _DEBUG_ 0				//定义是否打印调试信息：0不打印，1打印
+#define _DEBUG_ 0			//定义是否打印调试信息：0不打印，1打印
 
 #if _DEBUG_
 #define DEBUG_Printf(...)   printf(__VA_ARGS__)
-#define DEBUG_SendBytes(b,n)	UartSendBytes(USART1,b,n);
-#define DEBUG_SendStr(s)  		UartSendStr(USART1,s)
+#define DEBUG_SendBytes(b,n)	UartSendBytes(USART2,b,n);
+#define DEBUG_SendStr(s)  		UartSendStr(USART2,s)
 #else
 #define DEBUG_Printf(...) 
 #define DEBUG_SendBytes(b,n)

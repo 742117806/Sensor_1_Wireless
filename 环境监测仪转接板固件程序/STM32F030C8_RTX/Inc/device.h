@@ -70,7 +70,8 @@ typedef struct LOCK_JOINNET_DATA_
 {
 	uint8_t version[2];		//版本号
 	
-}LOCK_JOINNET_DATA__t;
+}LOCK_JOINNET_DATA_t;
+
 
 
 
@@ -117,18 +118,41 @@ typedef struct SENSOR_UPLOAD_DATA_
 //传感器注册入网时数据区结构(数据标识后面的内容)
 typedef struct SENSOR_JOINNET_DATA_
 {
+//	uint8_t version[2];		//版本号
+//	uint8_t no_2;
+//	uint8_t infrared:1;		//红外感应	
+//	uint8_t no_1:7;			//预留
+//	uint8_t PM2_5:1;		//PM2.5
+//	uint8_t HCHO:1;			//甲醛
+//	uint8_t CO2:1;			//二氧化碳
+//	uint8_t TVOC:1;			//总挥发有机物
+//	uint8_t humidity:1;		//湿度
+//	uint8_t temperature:1;	//温度
+//	uint8_t wind_power:1; 	//风力
+//	uint8_t rainfall:1;		//雨量
+
 	uint8_t version[2];		//版本号
-	uint8_t no_2;
+	uint8_t byte2_0_3:4;	//预留
 	uint8_t infrared:1;		//红外感应	
-	uint8_t no_1:7;			//预留
-	uint8_t PM2_5:1;		//PM2.5
-	uint8_t HCHO:1;			//甲醛
-	uint8_t CO2:1;			//二氧化碳
-	uint8_t TVOC:1;			//总挥发有机物
+	uint8_t doorLock:1;		//门磁
+	uint8_t byte2_6_7:2;	//预留
+
+	
+	uint8_t byte1_0_1:2;			//预留
 	uint8_t humidity:1;		//湿度
 	uint8_t temperature:1;	//温度
 	uint8_t wind_power:1; 	//风力
 	uint8_t rainfall:1;		//雨量
+	uint8_t byte1_6_7:2;			//预留
+	
+	uint8_t PM2_5:1;		//PM2.5
+	uint8_t HCHO:1;			//甲醛
+	uint8_t CO2:1;			//二氧化碳
+	uint8_t TVOC:1;			//总挥发有机物
+	uint8_t byte1_4_7:4;			//预留
+
+
+	
 	
 }SENSOR_JOINNET_DATA_t;
 
@@ -144,6 +168,7 @@ void DeviceJoinNet(FRAME_CMD_t *frame_cmd);
 void SensorDataReadCmdSend(void);
 void SensorProcess(uint8_t *recvData);
 void Device_MAC_Init(void);
+void AES_Init(void);
 
 
 #endif

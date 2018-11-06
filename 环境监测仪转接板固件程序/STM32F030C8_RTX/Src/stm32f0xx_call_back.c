@@ -11,7 +11,7 @@
 //外部管脚中断
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == GPIO_PIN_7) //无线IRQ中断，PF7
+    if (GPIO_Pin == SI4438_nIRQ_Pin) //无线IRQ中断，PF7
     {
         //UartSendBytes(USART1,(uint8_t*)"GPIO_PIN_6 EXIT \r\n",18);
         Si4438_Interrupt_Handler(&Wireless_Buf);
@@ -49,6 +49,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         }	
 #endif
     }
+	if (huart->Instance == USART2) //如果是串口1
+    {
+	    UpUart_RX_INT_Process(uart2Rec, &MAC_UartRec);   //烧录/读取设备MAC协议      
+			SensorDataReadFromUart(uart2Rec,&uart1RecBuff); //通信协议
+	}
 }
 
 /*

@@ -285,10 +285,11 @@ Wireless_ErrorType Si4438_Transmit(WLS *pWL, uint8_t channel_number, uint8_t *ad
 
 Wireless_ErrorType Si4438_Transmit_Start(WLS *pWL, uint8_t channel_number, uint8_t *addr, uint8_t length)
 {
-  uint8_t i,cnt = 0;
+  uint8_t i;
+	//uint8_t cnt = 0;
   uint8_t int_status[8] = {0};
   volatile uint16_t dest = 0;
-  uint8_t temp[2] = {0};
+  //uint8_t temp[2] = {0};
   
   
   if(WIRELESS_ERROR_CODE == Wireless_InitError)  return Wireless_InitError;
