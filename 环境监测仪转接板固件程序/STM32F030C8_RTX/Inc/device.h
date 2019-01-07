@@ -158,6 +158,7 @@ typedef struct SENSOR_JOINNET_DATA_
 
 
 extern DeviceInfo_t deviceInfo;
+extern uint16_t isMachDelayCnt;
 
 
 void DoorLockDataTask(void);

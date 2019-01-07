@@ -81,8 +81,8 @@ int fputc(int ch, FILE *f)
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART2 and Loop until the end of transmission */
 
-    USART1->TDR = ch;
-    while ((USART1->ISR & 0X40) == 0)
+    USART2->TDR = ch;
+    while ((USART2->ISR & 0X40) == 0)
         ;
     return ch;
 }

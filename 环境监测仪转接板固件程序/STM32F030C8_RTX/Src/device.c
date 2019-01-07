@@ -27,8 +27,8 @@
 #include "delay.h"
 
 const uint8_t version[2]={01,00};		//版本号
-
-
+uint8_t last_PM25_value[3] = 0;          //上次PM2_5的值
+uint16_t isMachDelayCnt = 10000;
 
 DeviceInfo_t deviceInfo=
 {
@@ -289,7 +289,7 @@ void WirelessRespoint(FRAME_CMD_t*frame,FRAME_CMD_t* respoint,uint8_t result,uin
 	respoint->Ctrl.eventFlag = 0;		//普通帧
 	respoint->Ctrl.c_AFN = 0;			//有74编码
 	respoint->DataLen = datPath_len+4;	//数据长度中有1个数据功能和3个数据标识
-	respoint->userData.AFN = frame->userData.AFN;
+	respoint->userData.AFN = 0;          
 	respoint->FSQ.frameNum = frame->FSQ.frameNum;
 	respoint->FSQ.encryptType = 1;
 	respoint->FSQ.routeFlag = 0;
@@ -491,8 +491,14 @@ void SensorProcess(uint8_t *recvData)
 	memcpy(uploadData.pm2_5_index,sensor_cmd->pm2_5_index,6);		//6个数据包括传感器数标识和数据
 	memcpy(uploadData.hum_index,sensor_cmd->hum_index,6);			//6个数据包括传感器数标识和数据
 	memcpy(uploadData.temp_index,sensor_cmd->temp_index,6);		//6个数据包括传感器数标识和数据
-		
-	SensorDataUpLoad((FRAME_CMD_t*)frame_cmd,(uint8_t*)&uploadData,sizeof(uploadData),frameNum++);
+	
+    
+	if(memcmp(last_PM25_value,uploadData.pm2_5_data,3)!=0)
+	{
+		memcpy(last_PM25_value,uploadData.pm2_5_data,3);
+		SensorDataUpLoad((FRAME_CMD_t*)frame_cmd,(uint8_t*)&uploadData,sizeof(uploadData),frameNum++);
+	}
+	
 
 }
 
@@ -521,7 +527,7 @@ void SensorDataReadTimer(void)
 	{
 		v_t = old_t - new_t;
 	}
-	if(v_t > 10000)			//10 秒
+	if(v_t > 60000)			//60 秒
 	{
 		v_t = 0;
 		old_t = new_t;

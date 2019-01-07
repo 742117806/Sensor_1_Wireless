@@ -84,6 +84,7 @@ static void MX_TIM1_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+
 /**
 ********************************************************************************************************* 
 *  函 数 名: AppTaskWireless 
@@ -182,31 +183,18 @@ void AppTaskWireless(void)
 	
 	if (WIRELESS_STATUS == Wireless_RX_Finish)
 	{
-//			#if _74CODE_EN
-//			p = (FRAME_CMD_t*)Wireless_Buf.Wireless_RxData;
-//			if(p->Ctrl.c_AFN == 0)
-//			{
-//				FrameData_74Convert((FRAME_CMD_t*)Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength,&out_len,0); //解码
-//				Wireless_Buf.Wireless_PacketLength = out_len;		//解码后长度
-//			}
-//			#endif
-//			#if _ENCRYPT_EN
-//			if(p->FSQ.encryptType != 0)
-//			{
-//			
-//				Encrypt_Convert(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength,&out_len,0);		//解密
-//				Wireless_Buf.Wireless_PacketLength = out_len;
-//			}
-//			#endif 			
-		//LEDG_TOGGLE();
-		//UartSendBytes(USART2,Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
-		WirelessRxProcess(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
-		if(WIRELESS_STATUS == Wireless_RX_Finish)
+		
+		if(Wireless_Buf.Wireless_RxData[0]==0xAC)
         {
+			DEBUG_SendBytes(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
+			WirelessRxProcess(Wireless_Buf.Wireless_RxData,Wireless_Buf.Wireless_PacketLength);
+
+		}	
+		if (WIRELESS_STATUS == Wireless_RX_Finish)
+		{
 			Si4438_Receive_Start(Wireless_Channel[0]); //开始接收无线数据
 		}
 		
-
 	}
 	if (WIRELESS_STATUS == Wireless_TX_Finish)
 	{
@@ -216,25 +204,8 @@ void AppTaskWireless(void)
 	else if (WIRELESS_STATUS == Wireless_RX_Failure)
 	{
 		WirelessRx_Timeout_Cnt = 0;
-//		DEBUG_Printf("Wireless_RX_Failure\r\n");
-//		delay_ms(30);
-//		Set_Property(Interrupt_Close);
-//		delay_ms(200);
 		Si4438_Receive_Start(Wireless_Channel[0]); //开始接收无线数据
 	}
-//		else if ((WIRELESS_STATUS == Wireless_RX_Sync) && (WirelessRx_Timeout_Cnt > 500)) //500ms超时
-//		{
-
-//			DEBUG_Printf("Wireless_RX_Sync\r\n");
-//			os_dly_wait(3);
-//			Set_Property(Interrupt_Close);
-//			os_dly_wait(20);
-//			Si4438_Receive_Start(Wireless_Channel[0]); //开始接收无线数据
-//			WirelessRx_Timeout_Cnt = 0;
-//		}
-//		os_sem_send(&semaphore);
-	//DEBUG_Printf("\r\nAppTaskWireless"); 
-
 }
 
 /* 
@@ -278,8 +249,8 @@ void AppTaskUartRx(void)
 	if(uart1RecBuff.state == SENSOR_FRAME_FENISH)
 	{
 		DEBUG_SendBytes(uart1RecBuff.buff,uart1RecBuff.cnt);
-    SensorProcess(uart1RecBuff.buff);
-		//Si4438_Transmit_Start(&Wireless_Buf, Wireless_Channel[0],uart1RecBuff.buff, uart1RecBuff.cnt);		//加密 
+		
+		SensorProcess(uart1RecBuff.buff);
 		uart1RecBuff.state = SENSOR_FRAME_HEAD;
 	}
 	
@@ -296,10 +267,12 @@ void AppTaskUartRx(void)
 ********************************************************************************************************* 
 */ 
 uint32_t SensorDataReadCnt = 0;
+extern uint8_t last_PM25_value[3];          //上次PM2_5的值
 void AppTaskUartTx(void)
 {
 
-	if(SensorDataReadCnt > 5000)		//1秒
+	
+	if(SensorDataReadCnt > 10000)		//10秒
 	{
 		SensorDataReadCnt = 0;
 		SensorDataReadCmdSend();
@@ -375,7 +348,7 @@ int main(void)
   /* USER CODE BEGIN 3 */
 		
 	  AppTaskWireless();
-	  AppTaskUartRx();
+	 AppTaskUartRx();
 	  AppTaskUartTx();
   }
   /* USER CODE END 3 */
